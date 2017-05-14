@@ -28,7 +28,9 @@ public class MainActivity extends AppCompatActivity {
 
     public Boolean reindexBooks = false;
 
-    public final String PREFERENCES_FILE = "preferences";
+    public final String preferencesFile = "preferences";
+
+    public int bookCount = 0;
     
     //public String pandoFilesDir;
 
@@ -37,20 +39,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences settings = getSharedPreferences(this.PREFERENCES_FILE, 0);
+        SharedPreferences settings = getSharedPreferences(this.preferencesFile, 0);
         //this.pandoFilesDir = toString(valueOf(getFilesDir()));
 
         Log.d("TAG", "this.reindexBooks");
         Log.d("TAG", valueOf(this.reindexBooks));
         Log.d("TAG", "trying user settings first");
-        if(settings.contains(this.PREFERENCES_FILE)) {
+        if(settings.contains(this.preferencesFile)) {
             this.reindexBooks = settings.getBoolean("reindexBooks", true);
+            this.bookCount = settings.getInt("bookCount",0);
         }
         else {
             settings.edit().putBoolean("reindexBooks", true).commit();
 
             this.reindexBooks = settings.getBoolean("reindexBooks", true);
-
 
             Log.d("TAG", "setting defaults");
         }
@@ -68,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            settings.edit().putBoolean("reindexBooks", false).commit();
-            this.reindexBooks = settings.getBoolean("reindexBooks", true);
+            settings.edit().putBoolean("reindexBooks", false).commit(); // set the stored value to false
+            this.reindexBooks = settings.getBoolean("reindexBooks", true); // update the values in the debugger and where I have access to them
 
         }
         Log.d("TAG", "this.reindexBooks:");
@@ -88,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
 
         List<String> results = new ArrayList<String>();
 
+        SharedPreferences settings = getSharedPreferences(this.preferencesFile, 0);
+
         File[] files = new File("/data/user/0/com.rustbeltrebellion.pando/files").listFiles();
         //If this pathname does not denote a directory, then listFiles() returns null.
 
@@ -97,22 +101,43 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        for (int i = 0; i < 3; i++) {
-            LinearLayout row = new LinearLayout(this);
-            row.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.FILL_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
 
-            for (int j = 0; j < 4; j++) {
-                Button btnTag = new Button(this);
-                btnTag.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
-                btnTag.setText("Button " + (j + 1 + (i * 4 )));
-                btnTag.setId(j + 1 + (i * 4));
-                row.addView(btnTag);
+        settings.edit().putInt("bookCount",results.size()).commit(); // set the stored value to false
+        this.bookCount = settings.getInt("bookCount", 0);
+
+        this.bookCount = 5; // mocking having files...
+
+        LinearLayout buttonsParentView = (LinearLayout) findViewById(R.id.booksList0);
+
+
+        for (int bookRowCount = 0; bookRowCount < this.bookCount; bookRowCount++) {
+            LinearLayout bookRow = new LinearLayout(this);
+            bookRow.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.FILL_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
+            LinearLayout buttonColumns = new LinearLayout(this);
+            buttonColumns.setOrientation(LinearLayout.HORIZONTAL);
+            for (int buttonColumn = 0; buttonColumn < 2; buttonColumn++) {
+
+                Button bookButton = new Button(this);
+
+                bookButton.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
+                if (buttonColumn == 0) {
+                    String bookTitle = "bookTitle[" + bookRowCount + "]";
+                    bookButton.setText(bookTitle);
+                    bookButton.setId(bookRowCount + 100); // limits IDs to 100 static predefined app elements
+                }
+                else {
+                    bookButton.setText("Delete");
+                    bookButton.setId(bookRowCount + 10000); // limits the library to 9,900 books and same number of bookButton IDs
+                }
+
+                buttonColumns.addView(bookButton);
+
             }
+            bookRow.addView(buttonColumns);
 
-            LinearLayout layout = new LinearLayout(this);
-            layout.setOrientation(LinearLayout.VERTICAL);  //Can also be done in xml by android:orientation="vertical"
+            bookRow.setOrientation(LinearLayout.VERTICAL);  //Can also be done in xml by android:orientation="vertical"
 
-            layout.addView(row);
+            buttonsParentView.addView(bookRow);
         }
         //setContentView(layout);
         //setContentView(R.layout.main);
