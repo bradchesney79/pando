@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/app_name">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="settings_storage"
+            android:summary='Internal or External Storage of "Books"'
+            android:switchTextOff="External"
+            android:switchTextOn="Internal"
+            android:title="Books Storage" />
+
+            <Preference android:title="Reindex: Click to find externally added reading materials" android:key="settings_reindex"/>
+
+    </PreferenceCategory>
+</PreferenceScreen>
+
