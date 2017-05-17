@@ -12,6 +12,7 @@ import android.view.View;
 import android.content.Context;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -95,45 +96,73 @@ public class MainActivity extends AppCompatActivity {
         File[] files = new File("/data/user/0/com.rustbeltrebellion.pando/files").listFiles();
         //If this pathname does not denote a directory, then listFiles() returns null.
 
-        for (File file : files) {
-            if (file.isFile()) {
-                results.add(file.getName());
-            }
-        }
+//        for (File file : files) {
+//            //Log.d("TAG", "Creating results, an array of filenames.");
+//            if (file.isFile()) {
+//                //results.add(file.getName());
+//            }
+//            else {
+//
+//            }
+//        }
 
+        results.add(0, "First Book"); // ToDo: remove these place holders
+        results.add(1, "Second Book");
+        results.add(2, "Third Book");
+        results.add(3, "Fifth Book");
+        results.add(4, "Fifth Book");
+
+        Log.d("TAG", "Generating results finished.");
 
         settings.edit().putInt("bookCount",results.size()).commit(); // set the stored value to false
         this.bookCount = settings.getInt("bookCount", 0);
 
-        this.bookCount = 5; // mocking having files...
-
         LinearLayout buttonsParentView = (LinearLayout) findViewById(R.id.booksList0);
+        Log.d("TAG", "Creating buttonsParentView.");
 
+        ArrayList<Button> bookButtonList = new ArrayList<Button>();
+        int buttonIdCount = 0;
+        Log.d("TAG", "Creating bookButtonList array list & explicit counter for buttons.");
+
+        ArrayList<LinearLayout> bookRowList = new ArrayList<LinearLayout>();
+        ArrayList<LinearLayout> bookRowColumnList = new ArrayList<LinearLayout>();
+        Log.d("TAG", "Creating bookRowList & bookRowColumnList array lists.");
 
         for (int bookRowCount = 0; bookRowCount < this.bookCount; bookRowCount++) {
+            Log.d("TAG", "In button row loop.");
             LinearLayout bookRow = new LinearLayout(this);
             bookRow.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.FILL_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
-            LinearLayout buttonColumns = new LinearLayout(this);
-            buttonColumns.setOrientation(LinearLayout.HORIZONTAL);
+            Log.d("TAG", "Creating button row layout.");
+            bookRowColumnList.add(bookRowCount, new LinearLayout(this));
+            bookRowColumnList.get(bookRowCount).setOrientation(LinearLayout.HORIZONTAL);
+            Log.d("TAG", "Creating button 2 columns layout.");
             for (int buttonColumn = 0; buttonColumn < 2; buttonColumn++) {
+                Log.d("TAG", "In the button creation loop.");
+                bookButtonList.add(buttonIdCount, new Button(this));
 
-                Button bookButton = new Button(this);
-
-                bookButton.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
+                bookButtonList.get(buttonIdCount).setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
                 if (buttonColumn == 0) {
-                    String bookTitle = "bookTitle[" + bookRowCount + "]";
-                    bookButton.setText(bookTitle);
-                    bookButton.setId(bookRowCount + 100); // limits IDs to 100 static predefined app elements
+                    String bookTitle = "bookTitle[" + buttonIdCount + "]";
+                    bookButtonList.get(buttonIdCount).setText(bookTitle);
+                    bookButtonList.get(buttonIdCount).setId(buttonIdCount + 50);
                 }
                 else {
-                    bookButton.setText("Delete");
-                    bookButton.setId(bookRowCount + 10000); // limits the library to 9,900 books and same number of bookButton IDs
+                    bookButtonList.get(buttonIdCount).setText("Delete");
+                    bookButtonList.get(buttonIdCount).setId(buttonIdCount + 51);
                 }
 
-                buttonColumns.addView(bookButton);
+//                btn.setOnClickListener(new OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(view v) {
+//                        // TODO Whatever you want onclick to do
+//                    }
+//                });
 
+                bookRowColumnList.get(bookRowCount).addView(bookButtonList.get(buttonIdCount));
+                buttonIdCount++;
             }
-            bookRow.addView(buttonColumns);
+            bookRow.addView(bookRowColumnList.get(bookRowCount));
 
             bookRow.setOrientation(LinearLayout.VERTICAL);  //Can also be done in xml by android:orientation="vertical"
 
