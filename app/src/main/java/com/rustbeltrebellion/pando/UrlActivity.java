@@ -21,7 +21,7 @@ public class UrlActivity extends AppCompatActivity {
 
     public boolean writeStory(String storyText) throws FileNotFoundException {
         Date date = null;
-        long unixTime = (long) date.getTime()/1000;
+        long unixTime = date.getTime() /1000;
         //System.out.println(unixTime );//<- prints 1352504418
 
         String FILENAME = "storyfile" + Long.toString(unixTime);

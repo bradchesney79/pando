@@ -26,4 +26,6 @@
     <string name="storage_note">Switching this setting attempts to move book files created by the app from internal storage to your SD Card or other "/External Storage/".</string>
     <string name="manual_reindex_setting">Manual Book Reindex</string>
     <string name="manual_reindex_note">It hurts nothing to click this button, use it to find books added via methods outside the app.</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

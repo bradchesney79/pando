@@ -14,6 +14,7 @@ import android.content.Context;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -131,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //This is the Layout that is intended to contain the button pairs representing a book to choose or delete
-        LinearLayout buttonsParentView = (LinearLayout) findViewById(R.id.booksList0);
+        LinearLayout buttonsParentView = (LinearLayout) findViewById(R.id.bookList0);
         buttonsParentView.setOrientation(LinearLayout.VERTICAL);
         buttonsParentView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         buttonsParentView.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
@@ -162,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
             for (int buttonColumn = 0; buttonColumn < 2; buttonColumn++) {
                 Log.d("TAG", "In the button creation loop.");
 
+                TextView bookTitleRow = new TextView(this);
 
                 bookButtonList.add(buttonIdCount, new Button(this));
 
