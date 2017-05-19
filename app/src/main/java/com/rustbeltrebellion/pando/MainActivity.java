@@ -133,8 +133,11 @@ public class MainActivity extends AppCompatActivity {
         //This is the Layout that is intended to contain the button pairs representing a book to choose or delete
         LinearLayout buttonsParentView = (LinearLayout) findViewById(R.id.booksList0);
         buttonsParentView.setOrientation(LinearLayout.VERTICAL);
-        buttonsParentView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        buttonsParentView.setVerticalGravity(Gravity.CENTER_VERTICAL);
+        buttonsParentView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        buttonsParentView.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+        buttonsParentView.setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
+        buttonsParentView.setGravity(Gravity.CENTER);
+        //buttonsParentView.setGravity(Gravity.FILL_VERTICAL);
         Log.d("TAG", "Creating buttonsParentView.");
 
         ArrayList<Button> bookButtonList = new ArrayList<Button>();
@@ -153,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
             bookRowColumnList.get(bookRowCount).setOrientation(LinearLayout.HORIZONTAL);
             bookRowColumnList.get(bookRowCount).setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.FILL_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
             bookRowColumnList.get(bookRowCount).setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
-
+            bookRowColumnList.get(bookRowCount).setVerticalGravity(Gravity.CENTER_VERTICAL);
 
             Log.d("TAG", "Creating buttons for 2 columns layout.");
             for (int buttonColumn = 0; buttonColumn < 2; buttonColumn++) {
@@ -183,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                 bookRowColumnList.get(bookRowCount).addView(bookButtonList.get(buttonIdCount));
                 buttonIdCount++;
             }
-
+            bookRowColumnList.get(bookRowCount).setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
 
             buttonsParentView.addView(bookRowColumnList.get(bookRowCount));
         }

@@ -9,7 +9,7 @@ import android.os.Bundle;
 
 
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends AppCompatActivity {
 
 
 
