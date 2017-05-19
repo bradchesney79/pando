@@ -3,11 +3,13 @@ package com.rustbeltrebellion.pando;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Bundle;
 
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.content.Context;
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     public final String preferencesFile = "preferences";
 
     public int bookCount = 0;
+
+    public int appWidth;
     
     //public String pandoFilesDir;
 
@@ -41,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Display deviceDisplay = getWindowManager().getDefaultDisplay();
+        Point displayInfo = new Point();
+        deviceDisplay.getSize(displayInfo);
+        this.appWidth = displayInfo.x;
 
         SharedPreferences settings = getSharedPreferences(this.preferencesFile, 0);
         //this.pandoFilesDir = toString(valueOf(getFilesDir()));
@@ -109,21 +118,21 @@ public class MainActivity extends AppCompatActivity {
 //              }
         }
 
-        results.add(0, "First Book"); // ToDo: remove these place holders
-        results.add(1, "Second Book");
-        results.add(2, "Third Book");
-        results.add(3, "Fourth Book");
-        results.add(4, "Fifth Book");
-//        results.add(5, "First Book"); // ToDo: remove these place holders
-//        results.add(6, "Second Book");
-//        results.add(7, "Third Book");
-//        results.add(8, "Fourth Book");
-//        results.add(9, "Fifth Book");
-//        results.add(10, "First Book"); // ToDo: remove these place holders
-//        results.add(11, "Second Book");
-//        results.add(12, "Third Book");
-//        results.add(13, "Fourth Book");
-//        results.add(14, "Fifth Book");
+        results.add(0, "First Book Title"); // ToDo: remove these place holders
+        results.add(1, "Second Book Title");
+        results.add(2, "Third Book Title");
+        results.add(3, "Fourth Book Title");
+        results.add(4, "Fifth Book Title");
+        results.add(5, "First Book Title"); // ToDo: remove these place holders
+        results.add(6, "Second Book Title");
+        results.add(7, "Third Book Title");
+        results.add(8, "Fourth Book Title");
+        results.add(9, "Fifth Book Title");
+        results.add(10, "First Book Title"); // ToDo: remove these place holders
+        results.add(11, "Second Book Title");
+        results.add(12, "Third Book Title");
+        results.add(13, "Fourth Book Title");
+        results.add(14, "Fifth Book Title");
 
         Log.d("TAG", "Generating results finished.");
 
@@ -135,10 +144,14 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout buttonsParentView = (LinearLayout) findViewById(R.id.bookList0);
         buttonsParentView.setOrientation(LinearLayout.VERTICAL);
         buttonsParentView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        buttonsParentView.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+        //buttonsParentView.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
         buttonsParentView.setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
         buttonsParentView.setGravity(Gravity.CENTER);
-        //buttonsParentView.setGravity(Gravity.FILL_VERTICAL);
+
+        Double buttonWidthUnit = (double)(this.appWidth / 5);
+        Double titleIndent = buttonWidthUnit / 2;
+        buttonsParentView.setPadding(titleIndent.intValue(),0,0,0);
+
         Log.d("TAG", "Creating buttonsParentView.");
 
         ArrayList<Button> bookButtonList = new ArrayList<Button>();
@@ -148,6 +161,8 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<LinearLayout> bookRowColumnList = new ArrayList<LinearLayout>();
         Log.d("TAG", "Creating bookRowColumnList array list.");
+
+
 
         for (int bookRowCount = 0; bookRowCount < this.bookCount; bookRowCount++) {
             Log.d("TAG", "Creating button row layout.");
@@ -159,22 +174,37 @@ public class MainActivity extends AppCompatActivity {
             bookRowColumnList.get(bookRowCount).setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
             bookRowColumnList.get(bookRowCount).setVerticalGravity(Gravity.CENTER_VERTICAL);
 
+            TextView bookTitleTextView = new TextView(this);
+            bookTitleTextView.setText(results.get(bookRowCount));
+
+            buttonsParentView.addView(bookTitleTextView);
+
             Log.d("TAG", "Creating buttons for 2 columns layout.");
-            for (int buttonColumn = 0; buttonColumn < 2; buttonColumn++) {
+            for (int buttonColumn = 0; buttonColumn < 3; buttonColumn++) {
                 Log.d("TAG", "In the button creation loop.");
 
-                TextView bookTitleRow = new TextView(this);
+
 
                 bookButtonList.add(buttonIdCount, new Button(this));
 
                 bookButtonList.get(buttonIdCount).setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
                 if (buttonColumn == 0) {
                     String bookTitle = results.get(bookRowCount);
-                    bookButtonList.get(buttonIdCount).setText(bookTitle);
+                    bookButtonList.get(buttonIdCount).setText("Read");
                     bookButtonList.get(buttonIdCount).setId(buttonIdCount + 50);
-                } else {
+                    bookButtonList.get(buttonIdCount).setWidth(buttonWidthUnit.intValue() * 2);
+
+                }
+                else if (buttonColumn == 1) {
+                    String bookTitle = results.get(bookRowCount);
+                    bookButtonList.get(buttonIdCount).setText("Details");
+                    bookButtonList.get(buttonIdCount).setId(buttonIdCount + 50);
+                    bookButtonList.get(buttonIdCount).setWidth(buttonWidthUnit.intValue());
+                }
+                else {
                     bookButtonList.get(buttonIdCount).setText("Delete");
                     bookButtonList.get(buttonIdCount).setId(buttonIdCount + 51);
+                    bookButtonList.get(buttonIdCount).setWidth(buttonWidthUnit.intValue());
                 }
 
 //                btn.setOnClickListener(new OnClickListener() {
@@ -186,9 +216,10 @@ public class MainActivity extends AppCompatActivity {
 //                });
 
                 bookRowColumnList.get(bookRowCount).addView(bookButtonList.get(buttonIdCount));
+
                 buttonIdCount++;
             }
-            bookRowColumnList.get(bookRowCount).setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
+            //bookRowColumnList.get(bookRowCount).setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
 
             buttonsParentView.addView(bookRowColumnList.get(bookRowCount));
         }
